@@ -7,19 +7,26 @@ using CodeReview_V2.Properties;
 
 namespace CodeReview_V2.Model
 {
-	public class Incident
+	public class Incident : CustomChangeset
 	{
-		public List<Changeset> ChangeSets { get { return changesets; } set { changesets = value; } }
-		private List<Changeset> changesets;
+		public List<CustomChangeset> ChangeSets { get { return changesets; } set { changesets = value; } }
+		private List<CustomChangeset> changesets;
 
 		public string IncidentTitle { get; set; }
 		public string IncidentURL { get; set; }
 
 		public Incident()
 		{
-			ChangeSets = new List<Changeset>();
+			ChangeSets = new List<CustomChangeset>();
 			IncidentTitle = Strings.Application_WindowTitle;
 			IncidentURL = @"http://can10-teamtrack/tmtrack/tmtrack.dll?";
+		}
+
+		public void clear()
+		{
+			IncidentTitle = String.Empty;
+			IncidentURL = @"http://can10-teamtrack/tmtrack/tmtrack.dll?";
+			ChangeSets.Clear();
 		}
 	}
 }
