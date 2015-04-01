@@ -11,28 +11,24 @@ namespace CodeReview_V2.Model
 		public string Filename { get { return filename; } set { filename = value; } }
 		private string filename;
 
-		public string Comments { get { return comments; } set { comments = value; } }
-		private string comments;
-
-		public string CheckoutChangeSet { get { return checkoutChangeSet; } set { checkoutChangeSet = value; } }
-		private string checkoutChangeSet;
-
-		public string CheckinChangeSet { get { return checkinChangeSet; } set { checkinChangeSet = value; } }
-		private string checkinChangeSet;
-
-		public string Author { get { return author; } set { author = value; } }
-		private string author;
+		public string CheckinChangeset { get { return checkinChangeset; } set { checkinChangeset = value; } }
+		private string checkinChangeset;
 
 		protected FileItem() { }
 
-		public static FileItem CreateFileItem(string filename, string comments, string checkoutNo, string checkinNo, string author)
+		public static FileItem CreateFileItem(string filename)
 		{
 			return new FileItem {
 			Filename = filename,
-			CheckoutChangeSet = checkoutNo,
-			CheckinChangeSet = checkinNo,
-			Author = author,
-			Comments = comments
+			CheckinChangeset = String.Empty
+			};
+		}
+
+		public static FileItem CreateFileItem(string filename, string checkinchangeset)
+		{
+			return new FileItem{
+				Filename = filename,
+				CheckinChangeset = checkinchangeset
 			};
 		}
 	}

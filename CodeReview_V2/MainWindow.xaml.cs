@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using CodeReview_V2.DataAccess;
+using CodeReview_V2.ViewModel;
 
 namespace CodeReview_V2
 {
@@ -20,9 +22,18 @@ namespace CodeReview_V2
 	/// </summary>
 	public partial class MainWindow : Window
 	{
+		private MainWindowViewModel viewModel;
 		public MainWindow()
 		{
 			InitializeComponent();
+			this.viewModel = new MainWindowViewModel();
+			this.DataContext = this.viewModel;
+			this.IncidentAssociations.ItemsSource = this.viewModel.IncidentDataGrid;
+		}
+
+		private void Button_Click(object sender, RoutedEventArgs e)
+		{
+			this.viewModel.GetIncident(72382);
 		}
 	}
 }
