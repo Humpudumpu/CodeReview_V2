@@ -18,7 +18,7 @@ namespace CodeReview_V2.ViewModel
 
 		public MainWindowViewModel()
 		{
-
+			GetIncident(72382);
 		}
 
 		public void GetIncident(uint incidentNo)
