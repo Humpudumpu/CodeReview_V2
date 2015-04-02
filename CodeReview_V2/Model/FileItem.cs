@@ -23,13 +23,5 @@ namespace CodeReview_V2.Model
 			CheckinChangeset = String.Empty
 			};
 		}
-
-		public static FileItem CreateFileItem(string filename, string checkinchangeset)
-		{
-			return new FileItem{
-				Filename = filename,
-				CheckinChangeset = checkinchangeset
-			};
-		}
 	}
 }
