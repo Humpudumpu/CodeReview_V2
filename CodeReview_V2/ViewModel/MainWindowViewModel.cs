@@ -13,8 +13,8 @@ namespace CodeReview_V2.ViewModel
 	public class MainWindowViewModel
 	{
 		CodeReview codeReview = new CodeReview();
-		public ObservableCollection<Incident> IncidentDataGrid { get { return incidentDataGrid; } }
-		private ObservableCollection<Incident> incidentDataGrid = new ObservableCollection<Incident>();
+		public ObservableCollection<CustomFileObject> IncidentDataGrid { get { return incidentDataGrid; } }
+		private ObservableCollection<CustomFileObject> incidentDataGrid = new ObservableCollection<CustomFileObject>();
 
 		public MainWindowViewModel()
 		{
@@ -24,6 +24,23 @@ namespace CodeReview_V2.ViewModel
 		public void GetIncident(uint incidentNo)
 		{
 			codeReview.GetIncident(incidentNo);
+	public class CustomFileObject
+	{
+		public string Filename { get; set; }
+		public string CheckoutChangeset { get; set; }
+		public string CheckinChangeset { get; set; }
+		public string Comments { get; set; }
+		public string DevBranch { get; set; }
+		public string Author { get; set; }
+
+		public CustomFileObject(string filename, string checkinChangeset, string checkoutchangeset, string comments, string devBranch, string author)
+		{
+			Filename = filename;
+			CheckinChangeset = checkinChangeset;
+			CheckoutChangeset = checkoutchangeset;
+			Comments = comments;
+			DevBranch = devBranch;
+			Author = author;
 		}
 	}
 }
