@@ -23,7 +23,31 @@ namespace CodeReview_V2.ViewModel
 
 		public void GetIncident(uint incidentNo)
 		{
-			codeReview.GetIncident(incidentNo);
+			Incident incident = codeReview.GetIncident(incidentNo);
+			if (incident == null)
+				return;
+
+			PopulateIncidentDataGrid(incident);
+		}
+
+		private void PopulateIncidentDataGrid(Incident incident)
+		{
+			IncidentDataGrid.Clear();
+			List<CustomFileObject> fileObjects = new List<CustomFileObject>();
+			foreach(CustomChangeset changeset in incident.ChangeSets)
+			{
+				foreach(FileItem file in changeset.Files)
+				{
+					//Here we can add filters for file that needs to be displayed and that can be ignored.
+					IncidentDataGrid.Add(
+						new CustomFileObject(file.Filename, changeset.CheckinChangeSet, changeset.CheckoutChangeSet, 
+											 changeset.Comments, changeset.DevBranch, changeset.Author)
+						);
+				}
+			}
+		}
+	}
+
 	public class CustomFileObject
 	{
 		public string Filename { get; set; }

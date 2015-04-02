@@ -23,18 +23,5 @@ namespace CodeReview_V2.DataAccess
 		{
 			return (tt.GetIncident(incidentNo));
 		}
-
-		private List<FileItem> GetDisplayFileList(List<CustomChangeset> changesets)
-		{
-			List<FileItem> tempFileList = new List<FileItem>();
-			foreach (CustomChangeset x in changesets)
-			{
-				foreach (FileItem y in x.Files)
-				{
-					tempFileList.Add(FileItem.CreateFileItem(y.Filename, x.CheckinChangeSet));
-				}
-			}
-			return tempFileList;
-		}
 	}
 }

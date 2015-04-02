@@ -12,10 +12,16 @@
         </Grid.RowDefinitions>
         <DataGrid Grid.Row="0" AutoGenerateColumns="False" 
                   Name="IncidentAssociations" HorizontalAlignment="Left" VerticalAlignment="Top" 
-                  CanUserAddRows="False" IsReadOnly="True" SelectionMode="Extended" Width="500">
-            <DataGridTextColumn Binding="{Binding Path=ChangeSets.Files.Filename}" Header="Filename" Width="40*"/>
-            <DataGridTextColumn Binding="{Binding Path=ChangeSets.Author}" Header="Author" Width="10*"/>
+                  CanUserAddRows="False" IsReadOnly="True" SelectionMode="Extended" Width="{Binding RelativeSource={RelativeSource Self}}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Path=Filename}" Header="Filename" Width="50*"/>
+                <DataGridTextColumn Binding="{Binding Path=CheckinChangeset}" Header="Checkin" Width="4*"/>
+                <DataGridTextColumn Binding="{Binding Path=CheckoutChangeset}" Header="Checkout" Width="4*"/>
+                <DataGridTextColumn Binding="{Binding Path=DevBranch}" Header="DevBranch" Width="5*"/>
+                <DataGridTextColumn Binding="{Binding Path=Comments}" Header="Comments" Width="27*"/>
+                <DataGridTextColumn Binding="{Binding Path=Author}" Header="Author" Width="10*"/>
+            </DataGrid.Columns>
         </DataGrid>
-        <Button Content="Test" Click="Button_Click"/>
+        <Button Grid.Row ="1" Content="Test" Click="Button_Click"/>
     </Grid>
 </Window>
