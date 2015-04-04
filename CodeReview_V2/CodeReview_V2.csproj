@@ -60,6 +60,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Command.cs" />
     <Compile Include="DataAccess\CodeReview.cs" />
     <Compile Include="DataAccess\TeamTrackAccess.cs" />
     <Compile Include="DataAccess\TFSAccess.cs" />
