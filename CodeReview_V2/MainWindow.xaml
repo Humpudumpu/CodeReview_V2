@@ -29,6 +29,6 @@
                 <DataGridTextColumn Binding="{Binding Path=Author}" Header="Author" Width="10*"/>
             </DataGrid.Columns>
         </DataGrid>
-        <Button Grid.Row ="1" Content="Test" Click="Button_Click"/>
+        <Button Grid.Row ="1" Content="Test"/>
     </Grid>
 </Window>

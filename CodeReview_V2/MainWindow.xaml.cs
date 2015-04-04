@@ -28,10 +28,5 @@ namespace CodeReview_V2
 			InitializeComponent();
 			this.viewModel = new MainWindowViewModel();
 		}
-
-		private void Button_Click(object sender, RoutedEventArgs e)
-		{
-			this.viewModel.GetIncident(72382);
-		}
 	}
 }
