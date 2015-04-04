@@ -42,36 +42,42 @@ namespace CodeReview_V2.ViewModel
 			IncidentDataGrid.Clear();
             if (location == "WORK")
             {
-            foreach (CustomChangeset changeset in incident.ChangeSets)
-            {
-                foreach (FileItem file in changeset.Files)
+                foreach (CustomChangeset changeset in incident.ChangeSets)
                 {
-                    //Here we can add filters for file that needs to be displayed and that can be ignored.
-                    IncidentDataGrid.Add(
-                        new CustomFileObject(file.Filename, changeset.CheckinChangeSet, changeset.CheckoutChangeSet,
-                                             changeset.Comments, changeset.DevBranch, changeset.Author)
-                        );
+                    foreach (FileItem file in changeset.Files)
+                    {
+                        //Here we can add filters for file that needs to be displayed and that can be ignored.
+                        IncidentDataGrid.Add(
+                            new CustomFileObject(file.Filename, changeset.CheckinChangeSet, changeset.CheckoutChangeSet,
+                                                 changeset.Comments, changeset.DevBranch, changeset.Author)
+                            );
+                    }
                 }
-            }
             }
             else
             {
-                IncidentDataGrid.Add(new CustomFileObject("$/USCAN/Product/5.2/5.2dev/file1", "22", "", "Comment1", "", "TestAuthor1"));
-                IncidentDataGrid.Add(new CustomFileObject("$/USCAN/Product/5.2/5.2dev/file2", "23", "", "Comment2", "", "TestAuthor2"));
-                IncidentDataGrid.Add(new CustomFileObject("$/USCAN/Product/5.2/5.2dev/file3", "24", "", "Comment3", "", "TestAuthor3"));
-                IncidentDataGrid.Add(new CustomFileObject("$/USCAN/Product/5.2/5.2dev/file4", "25", "", "Comment4", "", "TestAuthor4"));
-                IncidentDataGrid.Add(new CustomFileObject("$/USCAN/Product/5.2/5.2dev/file5", "26", "", "Comment5", "", "TestAuthor5"));
-                IncidentDataGrid.Add(new CustomFileObject("$/USCAN/Product/5.2/5.2dev/file6", "27", "", "Comment6", "", "TestAuthor6"));
-                IncidentDataGrid.Add(new CustomFileObject("$/USCAN/Product/5.2/5.2dev/file7", "28", "", "Comment7", "", "TestAuthor7"));
-                IncidentDataGrid.Add(new CustomFileObject("$/USCAN/Product/5.2/5.2dev/file8", "29", "", "Comment8", "", "TestAuthor8"));
-                IncidentDataGrid.Add(new CustomFileObject("$/USCAN/Product/5.2/5.2dev/file9", "30", "", "Comment9", "", "TestAuthor9"));
-                IncidentDataGrid.Add(new CustomFileObject("$/USCAN/Product/5.2/5.2dev/file10", "31", "", "Comment10", "", "TestAuthor10"));
-                IncidentDataGrid.Add(new CustomFileObject("$/USCAN/Product/5.2/5.2dev/file11", "32", "", "Comment11", "", "TestAuthor11"));
-                IncidentDataGrid.Add(new CustomFileObject("$/USCAN/Product/5.2/5.2dev/file12", "33", "", "Comment12", "", "TestAuthor12"));
+                PopulateIncidentDataGrid();
             }
 		}
+
+        private void PopulateIncidentDataGrid()
+        {
+            IncidentDataGrid.Add(new CustomFileObject(@"C:\USCAN\Product\5.2\5.2dev\file1", "22", "", "Comment1", "", "TestAuthor1"));
+            IncidentDataGrid.Add(new CustomFileObject(@"C:\USCAN\Product\5.2\5.2dev\file2", "23", "", "Comment2", "", "TestAuthor2"));
+            IncidentDataGrid.Add(new CustomFileObject(@"C:\USCAN\Product\5.2\5.2dev\file3", "24", "", "Comment3", "", "TestAuthor3"));
+            IncidentDataGrid.Add(new CustomFileObject(@"C:\USCAN\Product\5.2\5.2devfile4", "25", "", "Comment4", "", "TestAuthor4"));
+            IncidentDataGrid.Add(new CustomFileObject(@"C:\USCAN\Product\5.2\5.2devfile5", "26", "", "Comment5", "", "TestAuthor5"));
+            IncidentDataGrid.Add(new CustomFileObject(@"C:\USCAN\Product\5.2\5.2devfile6", "27", "", "Comment6", "", "TestAuthor6"));
+            IncidentDataGrid.Add(new CustomFileObject(@"C:\USCAN\Product\5.2\5.2devfile7", "28", "", "Comment7", "", "TestAuthor7"));
+            IncidentDataGrid.Add(new CustomFileObject(@"C:\USCAN\Product\5.2\5.2devfile8", "29", "", "Comment8", "", "TestAuthor8"));
+            IncidentDataGrid.Add(new CustomFileObject(@"C:\USCAN\Product\5.2\5.2devfile9", "30", "", "Comment9", "", "TestAuthor9"));
+            IncidentDataGrid.Add(new CustomFileObject(@"C:\USCAN\Product\5.2\5.2devfile10", "31", "", "Comment10", "", "TestAuthor10"));
+            IncidentDataGrid.Add(new CustomFileObject(@"C:\USCAN\Product\5.2\5.2devfile11", "32", "", "Comment11", "", "TestAuthor11"));
+            IncidentDataGrid.Add(new CustomFileObject(@"C:\USCAN\Product\5.2\5.2devfile12", "33", "", "Comment12", "", "TestAuthor12"));
+        }
 	}
 
+    
 	public class CustomFileObject
 	{
 		public string Filename { get; set; }
