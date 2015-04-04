@@ -27,8 +27,6 @@ namespace CodeReview_V2
 		{
 			InitializeComponent();
 			this.viewModel = new MainWindowViewModel();
-			this.DataContext = this.viewModel;
-			this.IncidentAssociations.ItemsSource = this.viewModel.IncidentDataGrid;
 		}
 
 		private void Button_Click(object sender, RoutedEventArgs e)
