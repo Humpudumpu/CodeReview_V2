@@ -20,6 +20,33 @@
                   Name="IncidentAssociations" HorizontalAlignment="Left" VerticalAlignment="Top" 
                   CanUserAddRows="False" IsReadOnly="True" SelectionMode="Extended" Width="{Binding RelativeSource={RelativeSource Self}}"
                   ItemsSource="{Binding IncidentDataGrid}">
+            <!--Grouping of items-->
+            <DataGrid.GroupStyle>
+                <GroupStyle ContainerStyle="{StaticResource GroupingHeader}">
+                    <GroupStyle.Panel>
+                        <ItemsPanelTemplate>
+                            <DataGridRowsPresenter Width="{Binding RelativeSource={RelativeSource Self}}"/>
+                        </ItemsPanelTemplate>
+                    </GroupStyle.Panel>
+                </GroupStyle>
+            </DataGrid.GroupStyle>
+            <!-- Context menu definitions-->
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <ContextMenu.ItemContainerStyle>
+                        <Style TargetType="{x:Type MenuItem}">
+                            <Setter Property="CommandParameter" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}, Path=PlacementTarget.SelectedItems}"/>
+                        </Style>
+                    </ContextMenu.ItemContainerStyle>
+                    <MenuItem Header="Difference" Command="{Binding FileDiff}"/>
+                    <MenuItem Header="Group by" Name="GroupByOptionsMenu" >
+                        <MenuItem Header="Comments" Name="Comments"/>
+                        <MenuItem Header="File" Name="Filename" />
+                        <MenuItem Header="File type" Name="FileType" />
+                    </MenuItem>
+                </ContextMenu>
+             </DataGrid.ContextMenu>
+            
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Path=Filename}" Header="Filename" Width="50*"/>
                 <DataGridTextColumn Binding="{Binding Path=CheckinChangeset}" Header="Checkin" Width="4*"/>
