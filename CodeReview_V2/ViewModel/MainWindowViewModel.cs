@@ -3,10 +3,13 @@ using System.Linq;
 using System.ComponentModel;
 using System.Windows.Data;
 using System.Collections.ObjectModel;
+using CodeReview_V2.DataAccess;
+using CodeReview_V2.Model;
+
 
 namespace CodeReview_V2.ViewModel
 {
-	public class MainWindowViewModel
+	public class MainWindowViewModel : ViewModelBase
 	{
 		CodeReview codeReview = new CodeReview();
 		public ObservableCollection<CustomFileObject> IncidentDataGrid { get { return incidentDataGrid; } }

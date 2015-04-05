@@ -69,6 +69,7 @@
     <Compile Include="Model\Incident.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModel\ReviewNotesViewModel.cs" />
+    <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="View\ReviewNotes.xaml.cs">
       <DependentUpon>ReviewNotes.xaml</DependentUpon>
     </Compile>
