@@ -43,6 +43,7 @@
                         <MenuItem Header="Comments" Name="Comments" Command="{Binding SetGroupByProperty}" CommandParameter="Comments"/>
                         <MenuItem Header="File" Name="Filename" Command="{Binding SetGroupByProperty}" CommandParameter="Filename"/>
                         <MenuItem Header="File type" Name="FileType" Command="{Binding SetGroupByProperty}" CommandParameter="FileType"/>
+                    <MenuItem Header="Difference" Command="{Binding GetFileDifference}"/>
                     </MenuItem>
                 </ContextMenu>
              </DataGrid.ContextMenu>
