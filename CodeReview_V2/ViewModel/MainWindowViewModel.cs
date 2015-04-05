@@ -18,6 +18,7 @@ namespace CodeReview_V2.ViewModel
         public ListCollectionView IncidentDataGridCollectionView { get; set; }
 
         public Command SetGroupByProperty { get; set; }
+        public Command GetFileDifference { get; set; }
 
 		public MainWindowViewModel()
 		{
