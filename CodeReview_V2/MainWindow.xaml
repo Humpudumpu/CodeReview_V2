@@ -14,7 +14,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="90*"/>
-            <RowDefinition Height="10"/>
+            <RowDefinition Height="10*"/>
         </Grid.RowDefinitions>
         <DataGrid Grid.Row="0" AutoGenerateColumns="False" 
                   Name="IncidentAssociations" HorizontalAlignment="Left" VerticalAlignment="Top" 
@@ -33,16 +33,12 @@
             <!-- Context menu definitions-->
             <DataGrid.ContextMenu>
                 <ContextMenu>
+                    <!-- unused code
                     <ContextMenu.ItemContainerStyle>
                         <Style TargetType="{x:Type MenuItem}">
                             <Setter Property="CommandParameter" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}, Path=PlacementTarget.SelectedItems}"/>
                         </Style>
-                    </ContextMenu.ItemContainerStyle>
-                    <MenuItem Header="Difference" Command="{Binding FileDiff}"/>
-                    <MenuItem Header="Group by" Name="GroupByOptionsMenu">
-                        <MenuItem Header="Comments" Name="Comments" Command="{Binding SetGroupByProperty}" CommandParameter="Comments"/>
-                        <MenuItem Header="File" Name="Filename" Command="{Binding SetGroupByProperty}" CommandParameter="Filename"/>
-                        <MenuItem Header="File type" Name="FileType" Command="{Binding SetGroupByProperty}" CommandParameter="FileType"/>
+                    </ContextMenu.ItemContainerStyle>-->
                     <MenuItem Header="Difference" Command="{Binding GetFileDifference}"/>
                         <MenuItem Header="Reset" Name="Reset" Command="{Binding SetGroupByProperty}" CommandParameter="Reset" InputGestureText="Ctrl+NumPad0"/>
                         <MenuItem Header="File type" Name="FileType" Command="{Binding SetGroupByProperty}" CommandParameter="FileType" InputGestureText="Ctrl+NumPad3"/>
