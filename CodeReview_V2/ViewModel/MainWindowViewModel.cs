@@ -1,7 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
-using System.ComponentModel;
 using System.Windows.Data;
+using System.ComponentModel;
 using System.Collections.ObjectModel;
 using CodeReview_V2.DataAccess;
 using CodeReview_V2.Model;
@@ -49,7 +50,6 @@ namespace CodeReview_V2.ViewModel
 		private void PopulateIncidentDataGrid(Incident incident)
 		{
 			IncidentDataGrid.Clear();
-			List<CustomFileObject> fileObjects = new List<CustomFileObject>();
 			foreach(CustomChangeset changeset in incident.ChangeSets)
 			{
 				foreach(FileItem file in changeset.Files)
@@ -57,7 +57,7 @@ namespace CodeReview_V2.ViewModel
 					//Here we can add filters for file that needs to be displayed and that can be ignored.
 					IncidentDataGrid.Add(
 						new CustomFileObject(file.Filename, changeset.CheckinChangeSet, changeset.CheckoutChangeSet, 
-											 changeset.Comments, changeset.DevBranch, changeset.Author)
+                                                 changeset.Comments, changeset.DevBranch, changeset.Author, Path.GetExtension(file.Filename))
 						);
 				}
 			}
@@ -72,8 +72,9 @@ namespace CodeReview_V2.ViewModel
 		public string Comments { get; set; }
 		public string DevBranch { get; set; }
 		public string Author { get; set; }
+        public string FileType { get; set; }
 
-		public CustomFileObject(string filename, string checkinChangeset, string checkoutchangeset, string comments, string devBranch, string author)
+		public CustomFileObject(string filename, string checkinChangeset, string checkoutchangeset, string comments, string devBranch, string author, string fileType)
 		{
 			Filename = filename;
 			CheckinChangeset = checkinChangeset;
@@ -81,6 +82,7 @@ namespace CodeReview_V2.ViewModel
 			Comments = comments;
 			DevBranch = devBranch;
 			Author = author;
+            FileType = fileType;
 		}
 	}
 }
