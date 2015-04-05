@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CodeReview_V2.DataAccess;
-using CodeReview_V2.Model;
 using System.ComponentModel;
+using System.Windows.Data;
 using System.Collections.ObjectModel;
 
 namespace CodeReview_V2.ViewModel
@@ -17,10 +13,23 @@ namespace CodeReview_V2.ViewModel
 		public ObservableCollection<CustomFileObject> IncidentDataGrid { get { return incidentDataGrid; } }
 		private ObservableCollection<CustomFileObject> incidentDataGrid = new ObservableCollection<CustomFileObject>();
 
+        public ListCollectionView IncidentDataGridCollectionView { get; set; }
+
+        public Command SetGroupByProperty { get; set; }
+
 		public MainWindowViewModel()
 		{
 			GetIncident(72382);
+            IncidentDataGridCollectionView = new ListCollectionView(IncidentDataGrid);
+            SetGroupByProperty = new Command(x => SetGroupPropertyDescription(x.ToString()));
 		}
+
+        private void SetGroupPropertyDescription(string groupPropertyDescription)
+        {
+            if (IncidentDataGridCollectionView.GroupDescriptions.Count > 0)
+                IncidentDataGridCollectionView.GroupDescriptions.Clear();
+            IncidentDataGridCollectionView.GroupDescriptions.Add(new PropertyGroupDescription(groupPropertyDescription));
+        }
 
 		public void GetIncident(uint incidentNo)
 		{
