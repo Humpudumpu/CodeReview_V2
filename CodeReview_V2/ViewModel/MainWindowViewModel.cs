@@ -33,7 +33,8 @@ namespace CodeReview_V2.ViewModel
         {
             if (IncidentDataGridCollectionView.GroupDescriptions.Count > 0)
                 IncidentDataGridCollectionView.GroupDescriptions.Clear();
-            IncidentDataGridCollectionView.GroupDescriptions.Add(new PropertyGroupDescription(groupPropertyDescription));
+            if (groupPropertyDescription != "Reset")
+                IncidentDataGridCollectionView.GroupDescriptions.Add(new PropertyGroupDescription(groupPropertyDescription));
         }
 
 		public void GetIncident(uint incidentNo)
