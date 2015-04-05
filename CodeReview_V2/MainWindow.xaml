@@ -45,6 +45,7 @@
                         <MenuItem Header="File type" Name="FileType" Command="{Binding SetGroupByProperty}" CommandParameter="FileType"/>
                     <MenuItem Header="Difference" Command="{Binding GetFileDifference}"/>
                         <MenuItem Header="Reset" Name="Reset" Command="{Binding SetGroupByProperty}" CommandParameter="Reset" InputGestureText="Ctrl+NumPad0"/>
+                        <MenuItem Header="File type" Name="FileType" Command="{Binding SetGroupByProperty}" CommandParameter="FileType" InputGestureText="Ctrl+NumPad3"/>
                     </MenuItem>
                 </ContextMenu>
              </DataGrid.ContextMenu>
