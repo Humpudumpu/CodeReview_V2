@@ -8,6 +8,12 @@
     <Window.DataContext>
         <VM:MainWindowViewModel/>
     </Window.DataContext>
+    <Window.InputBindings>
+        <KeyBinding Key="NumPad0" Modifiers="Control" Command="{Binding SetGroupByProperty}" CommandParameter="Reset"/>
+        <KeyBinding Key="NumPad1" Modifiers="Control" Command="{Binding SetGroupByProperty}" CommandParameter="Comments"/>
+        <KeyBinding Key="NumPad2" Modifiers="Control" Command="{Binding SetGroupByProperty}" CommandParameter="Filename"/>
+        <KeyBinding Key="NumPad3" Modifiers="Control" Command="{Binding SetGroupByProperty}" CommandParameter="FileType"/>
+    </Window.InputBindings>
     <Window.Resources>
         <ResourceDictionary Source="MainWindowResources.xaml" />
     </Window.Resources>
@@ -41,6 +47,8 @@
                     </ContextMenu.ItemContainerStyle>-->
                     <MenuItem Header="Difference" Command="{Binding GetFileDifference}"/>
                         <MenuItem Header="Reset" Name="Reset" Command="{Binding SetGroupByProperty}" CommandParameter="Reset" InputGestureText="Ctrl+NumPad0"/>
+                        <MenuItem Header="Comments" Name="Comments" Command="{Binding SetGroupByProperty}" CommandParameter="Comments" InputGestureText="Ctrl+NumPad1"/>
+                        <MenuItem Header="File" Name="Filename" Command="{Binding SetGroupByProperty}" CommandParameter="Filename" InputGestureText="Ctrl+NumPad2"/>
                         <MenuItem Header="File type" Name="FileType" Command="{Binding SetGroupByProperty}" CommandParameter="FileType" InputGestureText="Ctrl+NumPad3"/>
                     </MenuItem>
                 </ContextMenu>
