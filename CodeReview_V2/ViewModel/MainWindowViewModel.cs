@@ -17,8 +17,10 @@ namespace CodeReview_V2.ViewModel
 
         public ListCollectionView IncidentDataGridCollectionView { get; set; }
 
+        #region Command objects
         public Command SetGroupByProperty { get; set; }
         public Command GetFileDifference { get; set; }
+        #endregion //Command objects
 
 		public MainWindowViewModel()
 		{
