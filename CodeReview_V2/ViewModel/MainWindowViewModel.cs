@@ -3,10 +3,13 @@ using System.Linq;
 using System.ComponentModel;
 using System.Windows.Data;
 using System.Collections.ObjectModel;
+using CodeReview_V2.DataAccess;
+using CodeReview_V2.Model;
+
 
 namespace CodeReview_V2.ViewModel
 {
-	public class MainWindowViewModel
+	public class MainWindowViewModel : ViewModelBase
 	{
         const string location = "HOME";
 		//CodeReview codeReview = new CodeReview();
@@ -64,9 +67,7 @@ namespace CodeReview_V2.ViewModel
                 }
             }
             else
-            {
                 PopulateIncidentDataGrid();
-            }
 		}
 
         private void PopulateIncidentDataGrid()
