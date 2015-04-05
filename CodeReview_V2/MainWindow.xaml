@@ -19,7 +19,7 @@
         <DataGrid Grid.Row="0" AutoGenerateColumns="False" 
                   Name="IncidentAssociations" HorizontalAlignment="Left" VerticalAlignment="Top" 
                   CanUserAddRows="False" IsReadOnly="True" SelectionMode="Extended" Width="{Binding RelativeSource={RelativeSource Self}}"
-                  ItemsSource="{Binding IncidentDataGrid}">
+                  ItemsSource="{Binding IncidentDataGridCollectionView}">
             <!--Grouping of items-->
             <DataGrid.GroupStyle>
                 <GroupStyle ContainerStyle="{StaticResource GroupingHeader}">
@@ -39,10 +39,10 @@
                         </Style>
                     </ContextMenu.ItemContainerStyle>
                     <MenuItem Header="Difference" Command="{Binding FileDiff}"/>
-                    <MenuItem Header="Group by" Name="GroupByOptionsMenu" >
-                        <MenuItem Header="Comments" Name="Comments"/>
-                        <MenuItem Header="File" Name="Filename" />
-                        <MenuItem Header="File type" Name="FileType" />
+                    <MenuItem Header="Group by" Name="GroupByOptionsMenu">
+                        <MenuItem Header="Comments" Name="Comments" Command="{Binding SetGroupByProperty}" CommandParameter="Comments"/>
+                        <MenuItem Header="File" Name="Filename" Command="{Binding SetGroupByProperty}" CommandParameter="Filename"/>
+                        <MenuItem Header="File type" Name="FileType" Command="{Binding SetGroupByProperty}" CommandParameter="FileType"/>
                     </MenuItem>
                 </ContextMenu>
              </DataGrid.ContextMenu>
