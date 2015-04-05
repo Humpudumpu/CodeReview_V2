@@ -46,6 +46,14 @@
                         </Style>
                     </ContextMenu.ItemContainerStyle>-->
                     <MenuItem Header="Difference" Command="{Binding GetFileDifference}"/>
+                    <MenuItem Header="Group by" Name="GroupByOptionsMenu" >
+                        <MenuItem.Icon>
+                            <Image Width="20" Height="20">
+                                <Image.Source>
+                                    <BitmapImage UriSource="/Resources/Images/grouping-tree.png"/>
+                                </Image.Source>
+                            </Image>
+                        </MenuItem.Icon>
                         <MenuItem Header="Reset" Name="Reset" Command="{Binding SetGroupByProperty}" CommandParameter="Reset" InputGestureText="Ctrl+NumPad0"/>
                         <MenuItem Header="Comments" Name="Comments" Command="{Binding SetGroupByProperty}" CommandParameter="Comments" InputGestureText="Ctrl+NumPad1"/>
                         <MenuItem Header="File" Name="Filename" Command="{Binding SetGroupByProperty}" CommandParameter="Filename" InputGestureText="Ctrl+NumPad2"/>
