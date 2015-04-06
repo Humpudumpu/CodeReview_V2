@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Drawing;
+using System.Windows;
 using System.Windows.Data;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
@@ -27,20 +28,51 @@ namespace CodeReview_V2.ViewModel
         public Command SetGroupByProperty { get; set; }
         public Command GetFileDifference { get; set; }
 		public Command FetchIncident { get; set; }
+		public Command CopyChangesetText { get; set; }
+		public Command ToggleCodeReviewNoteVisibility { get; set; }
         #endregion //Command objects
 
 		public string FontName { get; set; }
 		public uint FontSize { get ; set; }
 		public uint IncidentAssociationCount { get ; set; }
+		public string CodeReviewText { get; set; }
+		public Visibility CodeReviewNotesVisibility { get; set; }
 
 		public MainWindowViewModel()
 		{
             IncidentDataGridCollectionView = new ListCollectionView(IncidentDataGrid);
             SetGroupByProperty = new Command(x => SetGroupPropertyDescription(x.ToString()));
 			FetchIncident = new Command(x => GetIncident(x.ToString()));
+			CopyChangesetText = new Command(x => AddToCodeReviewNote(x));
+			ToggleCodeReviewNoteVisibility = new Command(x => ToggleCodeReviewNotes(x));
 			IncidentAssociationCount = 0;
 			FontName = "Courier New";
+			CodeReviewText = String.Empty;
+			CodeReviewNotesVisibility = Visibility.Collapsed;
 			GetSupportedFonts();
+		}
+
+		{
+
+		private void ToggleCodeReviewNotes(object fileObject)
+		{
+			CodeReviewNotesVisibility = CodeReviewNotesVisibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+			OnPropertyChanged("CodeReviewNotesVisibility");
+		}
+
+		private void SaveCodeReviewText()
+		{
+			//Not implemented
+			return;
+		}
+
+		private void AddToCodeReviewNote(object customFileObject)
+		{
+			if (IncidentAssociationCount == 0)
+				return;
+			CustomFileObject fileObject = customFileObject as CustomFileObject;
+			CodeReviewText += "\n" + fileObject.ToString();
+			OnPropertyChanged("CodeReviewText");
 		}
 
 		private void GetSupportedFonts()
@@ -113,6 +145,13 @@ namespace CodeReview_V2.ViewModel
 			DevBranch = devBranch;
 			Author = author;
             FileType = fileType;
+		}
+
+		public override string ToString()
+		{
+			string customFileObjectAsText = String.Empty;
+			customFileObjectAsText = String.Format("Filename: {0} ; Checkin : {1} ; Checkout : {2}", this.Filename, this.CheckinChangeset, this.CheckoutChangeset);
+			return customFileObjectAsText;
 		}
 	}
 }

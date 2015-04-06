@@ -13,6 +13,7 @@
         <KeyBinding Key="NumPad1" Modifiers="Control" Command="{Binding SetGroupByProperty}" CommandParameter="Comments"/>
         <KeyBinding Key="NumPad2" Modifiers="Control" Command="{Binding SetGroupByProperty}" CommandParameter="Filename"/>
         <KeyBinding Key="NumPad3" Modifiers="Control" Command="{Binding SetGroupByProperty}" CommandParameter="FileType"/>
+        <KeyBinding Key="F" Modifiers="Control" Command="{Binding ToggleCodeReviewNoteVisibility}" CommandParameter="{Binding ElementName=IncidentAssociations, Path=SelectedItem}"/>
     </Window.InputBindings>
     <Window.Resources>
         <ResourceDictionary Source="MainWindowResources.xaml" />
@@ -21,6 +22,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="90*"/>
             <RowDefinition Height="10*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <DataGrid Grid.Row="0" AutoGenerateColumns="False" 
                   Name="IncidentAssociations" HorizontalAlignment="Left" VerticalAlignment="Top" 
@@ -63,6 +65,9 @@
                     </MenuItem>
                 </ContextMenu>
             </DataGrid.ContextMenu>
+            <DataGrid.InputBindings>
+                <KeyBinding Key="Right" Modifiers="Control" Command="{Binding OpenCodeReviewNote}" CommandParameter="{Binding ElementName=IncidentDataGridCollectionView, Path=SelectedItem}"/>
+            </DataGrid.InputBindings>
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Path=Filename}" Header="Filename" Width="50*"/>
                 <DataGridTextColumn Binding="{Binding Path=CheckinChangeset}" Header="Checkin" Width="4*"/>
