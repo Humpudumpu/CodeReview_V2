@@ -18,12 +18,14 @@
     <Window.Resources>
         <ResourceDictionary Source="MainWindowResources.xaml" />
     </Window.Resources>
+    <!-- Region CodeReview Core -->
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="90*"/>
             <RowDefinition Height="10*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
+        <!-- Region Incident Associations -->
         <DataGrid Grid.Row="0" AutoGenerateColumns="False" 
                   Name="IncidentAssociations" HorizontalAlignment="Left" VerticalAlignment="Top" 
                   CanUserAddRows="False" IsReadOnly="True" SelectionMode="Extended" Width="{Binding RelativeSource={RelativeSource Self}}"
@@ -66,7 +68,6 @@
                 </ContextMenu>
             </DataGrid.ContextMenu>
             <DataGrid.InputBindings>
-                <KeyBinding Key="Right" Modifiers="Control" Command="{Binding OpenCodeReviewNote}" CommandParameter="{Binding ElementName=IncidentDataGridCollectionView, Path=SelectedItem}"/>
             </DataGrid.InputBindings>
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Path=Filename}" Header="Filename" Width="50*"/>
@@ -77,13 +78,19 @@
                 <DataGridTextColumn Binding="{Binding Path=Author}" Header="Author" Width="10*"/>
             </DataGrid.Columns>
         </DataGrid>
-        <Grid Grid.Row="1">
+        <!-- EndRegion -->
+        <TextBlock Grid.Row="1" Name="CodeReviewNote" Visibility="{Binding CodeReviewNotesVisibility, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type RowDefinition}}}">
+            <TextBox Text="{Binding CodeReviewText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" AcceptsTab="True"
+                     ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.CanContentScroll="True"/>
+        </TextBlock>
+        <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="30*"/>
                 <ColumnDefinition Width="50*"/>
                 <ColumnDefinition Width="20*"/>
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Column="0" >
+                <!-- Region IncidentNo ComboBox-->
                 <ComboBox Name="cmbxIncidentNo" 
                       FontFamily="{Binding ElementName=cmbxFontFamily, Path=SelectedItem}" 
                       FontSize="{Binding ElementName=txtFontSize, Path=Text}"
@@ -96,9 +103,12 @@
                         <KeyBinding Key="Return" Command="{Binding FetchIncident}" CommandParameter="{Binding ElementName=cmbxIncidentNo, Path=Text}"/>
                     </ComboBox.InputBindings>
                 </ComboBox>
+                <!-- EndRegion -->
             </StackPanel>
+            <!-- Status Message update list-->
             <ListBox Grid.Column="1"/>
             <StackPanel Grid.Column="2" Orientation="Vertical">
+                <!-- Region Font family and Font size, stack panels -->
                 <StackPanel Orientation="Horizontal">
                     <ComboBox Name="cmbxFontFamily" 
                               ItemsSource="{Binding FontFamilyCollection}"
@@ -109,13 +119,18 @@
                     <TextBox Name="txtFontSize" Text="12"/>
                     </TextBlock>
                 </StackPanel>
+                <!-- EndRegion -->
+                <!-- Region Incident association counts -->
                 <TextBlock 
                     FontFamily="{Binding ElementName=cmbxFontFamily, Path=SelectedItem}" 
                     FontSize="{Binding ElementName=txtFontSize, Path=Text}">
                     <Label Content="Association Count:"/>
                     <Label Content="{Binding IncidentAssociationCount, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"/>
                 </TextBlock>
+                <!-- EndRegion -->
             </StackPanel>
         </Grid>
+        <!-- EndRegion -->
     </Grid>
+    <!-- EndRegion -->
 </Window>
