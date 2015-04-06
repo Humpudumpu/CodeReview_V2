@@ -25,7 +25,9 @@
         <DataGrid Grid.Row="0" AutoGenerateColumns="False" 
                   Name="IncidentAssociations" HorizontalAlignment="Left" VerticalAlignment="Top" 
                   CanUserAddRows="False" IsReadOnly="True" SelectionMode="Extended" Width="{Binding RelativeSource={RelativeSource Self}}"
-                  ItemsSource="{Binding IncidentDataGridCollectionView}">
+                  ItemsSource="{Binding IncidentDataGridCollectionView}"
+                  FontFamily="{Binding ElementName=cmbxFontFamily, Path=SelectedItem}" 
+                  FontSize="{Binding ElementName=txtFontSize, Path=Text}">
             <!--Grouping of items-->
             <DataGrid.GroupStyle>
                 <GroupStyle ContainerStyle="{StaticResource GroupingHeader}">
@@ -60,8 +62,7 @@
                         <MenuItem Header="File type" Name="FileType" Command="{Binding SetGroupByProperty}" CommandParameter="FileType" InputGestureText="Ctrl+NumPad3"/>
                     </MenuItem>
                 </ContextMenu>
-             </DataGrid.ContextMenu>
-            
+            </DataGrid.ContextMenu>
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Path=Filename}" Header="Filename" Width="50*"/>
                 <DataGridTextColumn Binding="{Binding Path=CheckinChangeset}" Header="Checkin" Width="4*"/>
@@ -71,6 +72,45 @@
                 <DataGridTextColumn Binding="{Binding Path=Author}" Header="Author" Width="10*"/>
             </DataGrid.Columns>
         </DataGrid>
-        <Button Grid.Row ="1" Content="Test"/>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="30*"/>
+                <ColumnDefinition Width="50*"/>
+                <ColumnDefinition Width="20*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal" Grid.Column="0" >
+                <ComboBox Name="cmbxIncidentNo" 
+                      FontFamily="{Binding ElementName=cmbxFontFamily, Path=SelectedItem}" 
+                      FontSize="{Binding ElementName=txtFontSize, Path=Text}"
+                      ItemsSource="{Binding FetchedIncidentCollection, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                      Text="{Binding IncidentNo, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"
+                      IsEditable="True"
+                      IsEnabled="{Binding EnableIncidentNoCmbx, UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"
+                          MinWidth="100">
+                    <ComboBox.InputBindings>
+                        <KeyBinding Key="Return" Command="{Binding FetchIncident}" CommandParameter="{Binding ElementName=cmbxIncidentNo, Path=Text}"/>
+                    </ComboBox.InputBindings>
+                </ComboBox>
+            </StackPanel>
+            <ListBox Grid.Column="1"/>
+            <StackPanel Grid.Column="2" Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <ComboBox Name="cmbxFontFamily" 
+                              ItemsSource="{Binding FontFamilyCollection}"
+                              IsEditable="False" IsReadOnly="True" 
+                              Text="{Binding FontName}"/>
+                    <TextBlock>
+                    <Label Content="Size :"/>
+                    <TextBox Name="txtFontSize" Text="12"/>
+                    </TextBlock>
+                </StackPanel>
+                <TextBlock 
+                    FontFamily="{Binding ElementName=cmbxFontFamily, Path=SelectedItem}" 
+                    FontSize="{Binding ElementName=txtFontSize, Path=Text}">
+                    <Label Content="Association Count:"/>
+                    <Label Content="{Binding IncidentAssociationCount, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"/>
+                </TextBlock>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>

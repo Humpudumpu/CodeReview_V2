@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Drawing;
 using System.Windows.Data;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
@@ -13,21 +14,39 @@ namespace CodeReview_V2.ViewModel
 	public class MainWindowViewModel : ViewModelBase
 	{
 		CodeReview codeReview = new CodeReview();
+
 		public ObservableCollection<CustomFileObject> IncidentDataGrid { get { return incidentDataGrid; } }
 		private ObservableCollection<CustomFileObject> incidentDataGrid = new ObservableCollection<CustomFileObject>();
 
+		public ObservableCollection<string> FontFamilyCollection { get { return fontFamilyCollection; } }
+		private ObservableCollection<string> fontFamilyCollection = new ObservableCollection<string>();
+		
         public ListCollectionView IncidentDataGridCollectionView { get; set; }
 
         #region Command objects
         public Command SetGroupByProperty { get; set; }
         public Command GetFileDifference { get; set; }
+		public Command FetchIncident { get; set; }
         #endregion //Command objects
+
+		public string FontName { get; set; }
+		public uint FontSize { get ; set; }
+		public uint IncidentAssociationCount { get ; set; }
 
 		public MainWindowViewModel()
 		{
-			GetIncident(72382);
             IncidentDataGridCollectionView = new ListCollectionView(IncidentDataGrid);
             SetGroupByProperty = new Command(x => SetGroupPropertyDescription(x.ToString()));
+			FetchIncident = new Command(x => GetIncident(x.ToString()));
+			IncidentAssociationCount = 0;
+			FontName = "Courier New";
+			GetSupportedFonts();
+		}
+
+		private void GetSupportedFonts()
+		{
+			foreach (FontFamily f in FontFamily.Families)
+				fontFamilyCollection.Add(f.Name);
 		}
 
         private void SetGroupPropertyDescription(string groupPropertyDescription)
@@ -38,13 +57,24 @@ namespace CodeReview_V2.ViewModel
                 IncidentDataGridCollectionView.GroupDescriptions.Add(new PropertyGroupDescription(groupPropertyDescription));
         }
 
-		public void GetIncident(uint incidentNo)
+		public void GetIncident(string x)
 		{
+			uint incidentNo;
+			if (!UInt32.TryParse(x, out incidentNo))
+				return;
+
 			Incident incident = codeReview.GetIncident(incidentNo);
 			if (incident == null)
 				return;
 
 			PopulateIncidentDataGrid(incident);
+			SetIncidentAssociationCount();
+		}
+
+		private void SetIncidentAssociationCount()
+		{
+			IncidentAssociationCount = (uint)IncidentDataGrid.Count;
+			OnPropertyChanged("IncidentAssociationCount");
 		}
 
 		private void PopulateIncidentDataGrid(Incident incident)
