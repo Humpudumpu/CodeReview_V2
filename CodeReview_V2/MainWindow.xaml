@@ -18,7 +18,6 @@
     <Window.Resources>
         <ResourceDictionary Source="MainWindowResources.xaml" />
     </Window.Resources>
-    <!-- Region CodeReview Core -->
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="90*"/>
@@ -51,7 +50,7 @@
                             <Setter Property="CommandParameter" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}, Path=PlacementTarget.SelectedItems}"/>
                         </Style>
                     </ContextMenu.ItemContainerStyle>-->
-                    <MenuItem Header="Difference" Command="{Binding GetFileDifference}"/>
+                    <MenuItem Header="Difference" Command="{Binding GetFileDifference}" CommandParameter="{Binding ElementName=IncidentAssociations, Path=SelectedItems}"/>
                     <MenuItem Header="Group by" Name="GroupByOptionsMenu" >
                         <MenuItem.Icon>
                             <Image Width="20" Height="20">
@@ -68,6 +67,7 @@
                 </ContextMenu>
             </DataGrid.ContextMenu>
             <DataGrid.InputBindings>
+                <KeyBinding Key="D" Modifiers="Control" Command="{Binding GetFileDifference}" CommandParameter="{Binding ElementName=IncidentAssociations, Path=SelectedItems}"/>
             </DataGrid.InputBindings>
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Path=Filename}" Header="Filename" Width="50*"/>

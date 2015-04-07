@@ -3,8 +3,10 @@ using System.IO;
 using System.Linq;
 using System.Drawing;
 using System.Windows;
+using System.Collections;
 using System.Windows.Data;
 using System.ComponentModel;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using CodeReview_V2.DataAccess;
 using CodeReview_V2.Model;
@@ -41,6 +43,7 @@ namespace CodeReview_V2.ViewModel
 		public MainWindowViewModel()
 		{
             IncidentDataGridCollectionView = new ListCollectionView(IncidentDataGrid);
+			GetFileDifference = new Command(x => FileDifference(x));
             SetGroupByProperty = new Command(x => SetGroupPropertyDescription(x.ToString()));
 			FetchIncident = new Command(x => GetIncident(x.ToString()));
 			CopyChangesetText = new Command(x => AddToCodeReviewNote(x));
@@ -52,7 +55,35 @@ namespace CodeReview_V2.ViewModel
 			GetSupportedFonts();
 		}
 
+		private void FileDifference(object FileObjects)
 		{
+			List<CustomFileObject> associations = ((IEnumerable)FileObjects).Cast<CustomFileObject>().ToList();
+			string diffFilename = String.Empty;
+			string checkout = string.Empty;
+			string checkin = string.Empty;
+			if (associations.Count > 1)
+			{
+
+				CustomFileObject minCheckedOutFile = associations.Aggregate((c, d) => Convert.ToInt32(c.CheckoutChangeset) < Convert.ToInt32(d.CheckoutChangeset) ? c : d);
+				CustomFileObject maxCheckedInFile = associations.Aggregate((c, d) => Convert.ToInt32(c.CheckinChangeset) > Convert.ToInt32(d.CheckinChangeset) ? c : d);
+				if (minCheckedOutFile.Filename != maxCheckedInFile.Filename)
+				{
+					//status message;
+					Console.WriteLine("Choose same file");
+					return;
+				}
+				diffFilename = minCheckedOutFile.Filename;
+				checkout = minCheckedOutFile.CheckoutChangeset;
+				checkin = maxCheckedInFile.CheckinChangeset;
+			}
+			else
+			{
+				diffFilename = associations[0].Filename;
+				checkout = associations[0].CheckoutChangeset;
+				checkin = associations[0].CheckinChangeset;
+			}
+			codeReview.GetFileDifference(diffFilename, checkout, checkin);
+		}
 
 		private void ToggleCodeReviewNotes(object fileObject)
 		{
@@ -135,7 +166,6 @@ namespace CodeReview_V2.ViewModel
 		public string DevBranch { get; set; }
 		public string Author { get; set; }
         public string FileType { get; set; }
-
 		public CustomFileObject(string filename, string checkinChangeset, string checkoutchangeset, string comments, string devBranch, string author, string fileType)
 		{
 			Filename = filename;
