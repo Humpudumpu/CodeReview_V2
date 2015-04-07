@@ -17,11 +17,6 @@ namespace CodeReview_V2.DataAccess
 
 		TeamTrack tt;
 		
-		//The checkin's from the incident branch are not recorded in the teamtrack incident.
-		//The teamtrack incident only has the branch and merge information.
-		//TFS access is required to get the changesets in the incident branch. These changesets will then
-		//be converted to ITeamtrack.Association
-		TFSAccess tf;
 		bool LoggedIn { get; set; }
 		public string IncidentTitle { get; set; }
 		public string IncidentURL { get; set; }
@@ -30,7 +25,6 @@ namespace CodeReview_V2.DataAccess
 		public TeamTrackAccess()
 		{
 			tt = new TeamTrack();
-			tf = new TFSAccess();
 			LoggedIn = false;
 			IncidentTitle = String.Empty;
 			IncidentURL = @"http://can10-teamtrack/tmtrack/tmtrack.dll?";
@@ -64,11 +58,6 @@ namespace CodeReview_V2.DataAccess
 		{
 			List<CustomChangeset> changesets = new List<CustomChangeset>();
 			changesets.AddRange(GetChangeset(incidentNo));
-
-			//Get the associations "Incident/#####"
-			List<CustomChangeset> incidentBranches = changesets.Where(x => x.IncidentBranch == true).ToList<CustomChangeset>();
-			//Get each changeset in the Incident branch
-			changesets.AddRange(tf.GetIncidentChanges(incidentBranches));
 			return changesets;
 		}
 

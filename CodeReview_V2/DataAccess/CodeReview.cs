@@ -22,7 +22,21 @@ namespace CodeReview_V2.DataAccess
 
 		public Incident GetIncident(uint incidentNo)
 		{
-			return (tt.GetIncident(incidentNo));
+			Incident incident = new Incident();
+
+			incident = tt.GetIncident(incidentNo);
+
+			//The checkin's from the incident branch are not recorded in the teamtrack incident.
+			//The teamtrack incident only has the branch and merge information.
+			//TFS access is required to get the changesets in the incident branch. These changesets will then
+			//be converted to ITeamtrack.Association
+			//Get the associations "Incident/#####"
+			List<CustomChangeset> incidentBranches = incident.ChangeSets.Where(x => x.IncidentBranch == true).ToList<CustomChangeset>();
+			//Get each changeset in the Incident branch
+			incident.ChangeSets.AddRange(tf.GetIncidentChanges(incidentBranches));
+			return incident;
+		}
+
 		public void GetFileDifference(string filename, string checkoutChangeset, string checkinChangeset)
 		{
 			string argument = String.Format("difference {0} /version:C{1}~C{2} /format:visual", filename, checkoutChangeset, checkinChangeset);
