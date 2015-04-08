@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Collections.Generic;
 	
 using System.Threading.Tasks;
 
@@ -11,20 +11,20 @@ namespace CodeReview_V2.DataAccess
 {
 	public class CodeReview
 	{
-		TeamTrackAccess tt;
-		TFSAccess tf;
+		TeamTrackAccess ttAccess;
+		TFSAccess tfsAccess;
 
 		public CodeReview()
 		{
-			tt = new TeamTrackAccess();
-			tf = new TFSAccess();
+			ttAccess = new TeamTrackAccess();
+			tfsAccess = new TFSAccess();
 		}
 
 		public Incident GetIncident(uint incidentNo)
 		{
 			Incident incident = new Incident();
 
-			incident = tt.GetIncident(incidentNo);
+			incident = ttAccess.GetIncident(incidentNo);
 
 			//The checkin's from the incident branch are not recorded in the teamtrack incident.
 			//The teamtrack incident only has the branch and merge information.
@@ -33,7 +33,7 @@ namespace CodeReview_V2.DataAccess
 			//Get the associations "Incident/#####"
 			List<CustomChangeset> incidentBranches = incident.ChangeSets.Where(x => x.IncidentBranch == true).ToList<CustomChangeset>();
 			//Get each changeset in the Incident branch
-			incident.ChangeSets.AddRange(tf.GetIncidentChanges(incidentBranches));
+			incident.ChangeSets.AddRange(tfsAccess.GetIncidentChanges(incidentBranches));
 			incident = AssignCheckoutChangeset(incident);
 			return incident;
 		}
@@ -93,7 +93,7 @@ namespace CodeReview_V2.DataAccess
 		public void GetFileDifference(string filename, string checkoutChangeset, string checkinChangeset)
 		{
 			string argument = String.Format("difference {0} /version:C{1}~C{2} /format:visual", filename, checkoutChangeset, checkinChangeset);
-			tf.RunTF<int>(argument, false, -1);
+			tfsAccess.RunTF<int>(argument, false, -1);
 		}
 	}
 }
