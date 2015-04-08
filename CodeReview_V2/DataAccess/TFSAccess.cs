@@ -36,11 +36,29 @@ namespace CodeReview_V2.DataAccess
 			{
 				//assumption is that the incidentbranch will be just one. so there will be just one file association.
 				List<Changeset> incidentBranchHistory = service.QueryHistory(incidentBranchPath.Files.First().Filename, RecursionType.Full).ToList<Changeset>();
+				//Remove the branch changeset number - the changeset where the incident branch started.
 				Changeset removed = incidentBranchHistory.Last();
 				incidentBranchHistory.Remove(removed);
 				changesets.AddRange(ParseTFSOutput(incidentBranchHistory));
+
+				//This is to avoid the last changeset - The changeset that was branched. (For ex. in Incident#72382 - changeset #222
+				//Why avoid last changeset because = file changes in the branch changeset is all the files in the dev branch. So when I query change for the 
+				//branch changeset, it gives me all the files in the branch - But in reality the change is that it was branched from the dev branch. 
+				//So I create a dummy custom changeset. Enumerate all the files that were changed in the incident branch and assign the changesetID of the branch - i.e. according to the ex. changeset#222
 				CustomChangeset removedCustom = new CustomChangeset("", removed.Comment, "", removed.ChangesetId.ToString(), removed.CommitterDisplayName);
-				//This is to avoid getting all the files from the branched changeset when the GetChangeSet command is used.
+				
+				//Enumerate all files that were changed in the incident branch after branching.
+				HashSet<string> allFilesModifiedInIncidentBranch = new HashSet<string>();
+				//Go through all the changeset other than the branch changeset, get all the files and assign the checkinchangeset as the branch changeset number.
+				//This is basically creating a changeset with only the files that were changes in the incident branch. (reverse engineering)
+				foreach (CustomChangeset changsetC in changesets)
+					foreach (FileItem file in changsetC.Files)
+						allFilesModifiedInIncidentBranch.Add(file.Filename);
+				
+				//Now assign all the files that were changed in the incident branch with the branch changeset number.
+				foreach (string file in allFilesModifiedInIncidentBranch)
+					removedCustom.Files.Add(FileItem.CreateFileItem(file, removed.ChangesetId.ToString(), ChangeType.Branch));
+
 				changesets.Add(removedCustom);
 			}
 			return changesets;
@@ -64,7 +82,9 @@ namespace CodeReview_V2.DataAccess
 				var tfsChangeset = service.GetChangeset(changesetEntry.ChangesetId);
 				Change[] tfschanges = tfsChangeset.Changes;
 				foreach (Change tfschange in tfschanges)
-					change.Files.Add(FileItem.CreateFileItem(tfschange.Item.ServerItem));
+				{
+					change.Files.Add(FileItem.CreateFileItem(tfschange.Item.ServerItem, changesetEntry.ChangesetId.ToString(), tfschange.ChangeType));
+				}
 			}
 			return incidentBranchChangeSet;
 		}

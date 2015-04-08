@@ -70,12 +70,13 @@ namespace CodeReview_V2.DataAccess
 			//Overthinking here.
 			foreach (ITeamTrack.Association association in associations)
 			{	CustomChangeset change = null;
+
 				foreach(CustomChangeset changes in changesets)
 				{
 					if (changes.CheckinChangeSet == association.checkInRevision)
 					{
 						change = changes;
-						change.Files.Add(FileItem.CreateFileItem(association.file));
+						change.Files.Add(FileItem.CreateFileItem(association.file, change.CheckinChangeSet));
 						break;
 					}
 				}
@@ -90,7 +91,8 @@ namespace CodeReview_V2.DataAccess
 				change.CheckoutChangeSet = association.checkOutRevision;
 				change.Author = association.author;
 				change.Comments = association.logMessage;
-				change.Files.Add(FileItem.CreateFileItem(association.file));
+				//change.CheckinTime = DateTime.ParseExact(association.time.ToString());
+				change.Files.Add(FileItem.CreateFileItem(association.file, association.checkInRevision));
 				
 				//From TeamTrack, find the association that mentions "Incident/#####"
 				if (incidentBranch.IsMatch(association.file))

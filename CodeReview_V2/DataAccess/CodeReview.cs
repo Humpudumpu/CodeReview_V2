@@ -34,6 +34,59 @@ namespace CodeReview_V2.DataAccess
 			List<CustomChangeset> incidentBranches = incident.ChangeSets.Where(x => x.IncidentBranch == true).ToList<CustomChangeset>();
 			//Get each changeset in the Incident branch
 			incident.ChangeSets.AddRange(tf.GetIncidentChanges(incidentBranches));
+			incident = AssignCheckoutChangeset(incident);
+			return incident;
+		}
+		//Complicated code. If possible at some later stage we can simplify the code.
+		private Incident AssignCheckoutChangeset(Incident incident)
+		{
+			Dictionary<string,List<string>> fileChangesets = new Dictionary<string,List<string>>();
+			string branchedChangeSet = String.Empty;
+			try
+			{
+				foreach (CustomChangeset changeset in incident.ChangeSets)
+				{
+					if (changeset.IncidentBranch)
+						branchedChangeSet = changeset.CheckinChangeSet;
+
+					foreach (FileItem file in changeset.Files)
+					{
+						if (!fileChangesets.ContainsKey(file.Filename))
+						{
+							List<string> changesets = new List<string>();
+							changesets.Add(file.CheckinChangeset);
+							fileChangesets.Add(file.Filename, changesets);
+						}
+						else
+						{
+							List<string> changesets;
+							fileChangesets.TryGetValue(file.Filename, out changesets);
+							changesets.Add(file.CheckinChangeset);
+						}
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine("Exception in AssignCheckoutChangeset : " + ex.Message);
+			}
+
+			for (int j = 0; j < incident.ChangeSets.Count; j++)
+			{
+				for (int i = 0; i < incident.ChangeSets[j].Files.Count; i++)
+				{
+					List<string> fileInvolvedChangesets;
+					fileChangesets.TryGetValue(incident.ChangeSets[j].Files[i].Filename, out fileInvolvedChangesets);
+					//sort in ascending order
+					fileInvolvedChangesets.Sort();
+					//Find the index of checkin changeset in the changeset list
+					int index = fileInvolvedChangesets.FindIndex(x => x.Equals(incident.ChangeSets[j].Files[i].CheckinChangeset));
+
+					//The checkout changeset will be the one before the checkin changeset always
+					if (index - 1 >= 0)
+						incident.ChangeSets[j].Files[i].CheckoutChangeset = fileInvolvedChangesets[index - 1];
+				}
+			}
 			return incident;
 		}
 
