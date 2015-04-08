@@ -70,11 +70,11 @@
                 <KeyBinding Key="D" Modifiers="Control" Command="{Binding GetFileDifference}" CommandParameter="{Binding ElementName=IncidentAssociations, Path=SelectedItems}"/>
             </DataGrid.InputBindings>
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Path=Filename}" Header="Filename" Width="50*"/>
-                <DataGridTextColumn Binding="{Binding Path=CheckinChangeset}" Header="Checkin" Width="4*"/>
-                <DataGridTextColumn Binding="{Binding Path=CheckoutChangeset}" Header="Checkout" Width="4*"/>
-                <DataGridTextColumn Binding="{Binding Path=DevBranch}" Header="DevBranch" Width="2*"/>
-                <DataGridTextColumn Binding="{Binding Path=Comments}" Header="Comments" Width="22*"/>
+                <DataGridTextColumn Binding="{Binding Path=Filename}" Header="Filename" Width="45*"/>
+                <DataGridTextColumn Binding="{Binding Path=CheckinChangeset}" Header="In" Width="4*"/>
+                <DataGridTextColumn Binding="{Binding Path=CheckoutChangeset}" Header="Out" Width="4*"/>
+                <DataGridTextColumn Binding="{Binding Path=DevBranch}" Header="Dev" Width="5*"/>
+                <DataGridTextColumn Binding="{Binding Path=Comments}" Header="Comments" Width="24*"/>
                 <DataGridTextColumn Binding="{Binding Path=Author}" Header="Author" Width="8*"/>
                 <DataGridTextColumn Binding="{Binding Path=CheckinTime, StringFormat='dd/MM/yyyy HH:mm:ss'}" Header="Time" Width="10*"/>
             </DataGrid.Columns>
@@ -111,7 +111,7 @@
             <StackPanel Grid.Column="2" Orientation="Vertical">
                 <!-- Region Font family and Font size, stack panels -->
                 <StackPanel Orientation="Horizontal">
-                    <ComboBox Name="cmbxFontFamily" 
+                    <ComboBox Name="cmbxFontFamily"
                               ItemsSource="{Binding FontFamilyCollection}"
                               IsEditable="False" IsReadOnly="True" 
                               Text="{Binding FontName}"/>
