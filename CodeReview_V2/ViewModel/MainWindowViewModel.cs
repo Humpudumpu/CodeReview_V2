@@ -82,6 +82,8 @@ namespace CodeReview_V2.ViewModel
 				checkout = associations[0].CheckoutChangeset;
 				checkin = associations[0].CheckinChangeset;
 			}
+			if (checkout.Equals(String.Empty) || checkin.Equals(String.Empty))
+				return;
 			codeReview.GetFileDifference(diffFilename, checkout, checkin);
 		}
 
