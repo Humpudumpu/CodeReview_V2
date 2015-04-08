@@ -149,8 +149,8 @@ namespace CodeReview_V2.ViewModel
 				{
 					//Here we can add filters for file that needs to be displayed and that can be ignored.
 					IncidentDataGrid.Add(
-						new CustomFileObject(file.Filename, changeset.CheckinChangeSet, changeset.CheckoutChangeSet, 
-                                                 changeset.Comments, changeset.DevBranch, changeset.Author, Path.GetExtension(file.Filename))
+						new CustomFileObject(file.Filename, file.CheckinChangeset, file.CheckoutChangeset,
+                                                 changeset.Comments, changeset.DevBranch, changeset.Author, Path.GetExtension(file.Filename), changeset.CheckinTime)
 						);
 				}
 			}
@@ -166,7 +166,9 @@ namespace CodeReview_V2.ViewModel
 		public string DevBranch { get; set; }
 		public string Author { get; set; }
         public string FileType { get; set; }
-		public CustomFileObject(string filename, string checkinChangeset, string checkoutchangeset, string comments, string devBranch, string author, string fileType)
+		public DateTime CheckinTime { get; set; }
+
+		public CustomFileObject(string filename, string checkinChangeset, string checkoutchangeset, string comments, string devBranch, string author, string fileType, DateTime dateTime)
 		{
 			Filename = filename;
 			CheckinChangeset = checkinChangeset;
@@ -175,6 +177,7 @@ namespace CodeReview_V2.ViewModel
 			DevBranch = devBranch;
 			Author = author;
             FileType = fileType;
+			CheckinTime = dateTime;
 		}
 
 		public override string ToString()

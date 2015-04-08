@@ -73,9 +73,10 @@
                 <DataGridTextColumn Binding="{Binding Path=Filename}" Header="Filename" Width="50*"/>
                 <DataGridTextColumn Binding="{Binding Path=CheckinChangeset}" Header="Checkin" Width="4*"/>
                 <DataGridTextColumn Binding="{Binding Path=CheckoutChangeset}" Header="Checkout" Width="4*"/>
-                <DataGridTextColumn Binding="{Binding Path=DevBranch}" Header="DevBranch" Width="5*"/>
-                <DataGridTextColumn Binding="{Binding Path=Comments}" Header="Comments" Width="27*"/>
-                <DataGridTextColumn Binding="{Binding Path=Author}" Header="Author" Width="10*"/>
+                <DataGridTextColumn Binding="{Binding Path=DevBranch}" Header="DevBranch" Width="2*"/>
+                <DataGridTextColumn Binding="{Binding Path=Comments}" Header="Comments" Width="22*"/>
+                <DataGridTextColumn Binding="{Binding Path=Author}" Header="Author" Width="8*"/>
+                <DataGridTextColumn Binding="{Binding Path=CheckinTime, StringFormat='dd/MM/yyyy HH:mm:ss'}" Header="Time" Width="10*"/>
             </DataGrid.Columns>
         </DataGrid>
         <!-- EndRegion -->
