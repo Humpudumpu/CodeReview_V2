@@ -22,11 +22,9 @@ namespace CodeReview_V2
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		private MainWindowViewModel viewModel;
 		public MainWindow()
 		{
 			InitializeComponent();
-			this.viewModel = new MainWindowViewModel();
 		}
 	}
 }
