@@ -70,13 +70,13 @@
                 <KeyBinding Key="D" Modifiers="Control" Command="{Binding GetFileDifference}" CommandParameter="{Binding ElementName=IncidentAssociations, Path=SelectedItems}"/>
             </DataGrid.InputBindings>
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Path=Filename}" Header="Filename" Width="45*"/>
-                <DataGridTextColumn Binding="{Binding Path=CheckinChangeset}" Header="In" Width="4*"/>
-                <DataGridTextColumn Binding="{Binding Path=CheckoutChangeset}" Header="Out" Width="4*"/>
-                <DataGridTextColumn Binding="{Binding Path=DevBranch}" Header="Dev" Width="5*"/>
-                <DataGridTextColumn Binding="{Binding Path=Comments}" Header="Comments" Width="24*"/>
-                <DataGridTextColumn Binding="{Binding Path=Author}" Header="Author" Width="8*"/>
-                <DataGridTextColumn Binding="{Binding Path=CheckinTime, StringFormat='dd/MM/yyyy HH:mm:ss'}" Header="Time" Width="10*"/>
+                <DataGridTextColumn Binding="{Binding Filename}" Header="Filename" Width="45*"/>
+                <DataGridTextColumn Binding="{Binding CheckoutChangeset}" Header="Out" Width="4*"/>
+                <DataGridTextColumn Binding="{Binding CheckinChangeset}" Header="In" Width="4*"/>
+                <DataGridTextColumn Binding="{Binding DevBranch}" Header="Dev" Width="5*"/>
+                <DataGridTextColumn Binding="{Binding Comments}" Header="Comments" Width="24*"/>
+                <DataGridTextColumn Binding="{Binding Author}" Header="Author" Width="8*"/>
+                <DataGridTextColumn Binding="{Binding CheckinTime, StringFormat='dd/MM/yyyy HH:mm:ss'}" Header="Time" Width="10*"/>
             </DataGrid.Columns>
         </DataGrid>
         <!-- EndRegion -->
