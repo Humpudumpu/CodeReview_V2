@@ -32,6 +32,10 @@ namespace CodeReview_V2.Model
 		public DateTime CheckinTime { get { return checkinTime; } set { checkinTime = value; } }
 		private DateTime checkinTime;
 
+		public bool ChangesetMerged { get; set; }
+
+		public string MergedToChangeset { get; set; }
+
 		private void Init(){
 			Files = new List<FileItem>();
 			DevBranch = String.Empty;
@@ -41,6 +45,8 @@ namespace CodeReview_V2.Model
 			Author = String.Empty;
 			IncidentBranch = false;
 			CheckinTime = System.DateTime.Now;
+			ChangesetMerged = false;
+			MergedToChangeset = String.Empty;
 		}
 
 		public CustomChangeset()
@@ -57,6 +63,8 @@ namespace CodeReview_V2.Model
 			CheckoutChangeSet = checkout;
 			CheckinChangeSet = checkin;
 			Author = author;
+			ChangesetMerged = false;
+			MergedToChangeset = String.Empty;
 		}
 	}
 }
