@@ -71,13 +71,26 @@
             </DataGrid.InputBindings>
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Filename}" Header="Filename" Width="45*"/>
-                <DataGridTextColumn Binding="{Binding CheckoutChangeset}" Header="Out" Width="2*"/>
-                <DataGridTextColumn Binding="{Binding CheckinChangeset}" Header="In" Width="2*"/>
+                <DataGridTextColumn Binding="{Binding CheckoutChangeset}" Header="Out" Width="4*"/>
+                <DataGridTextColumn Binding="{Binding CheckinChangeset}" Header="In" Width="4*"/>
                 <DataGridTextColumn Binding="{Binding DevBranch}" Header="Dev" Width="3*"/>
                 <DataGridTextColumn Binding="{Binding Comments}" Header="Comments" Width="24*"/>
                 <DataGridTextColumn Binding="{Binding Author}" Header="Author" Width="8*"/>
-                <DataGridTextColumn Binding="{Binding CheckinTime, StringFormat='dd/MM/yyyy HH:mm:ss'}" Header="Time" Width="12*"/>
-                <DataGridTextColumn Binding="{Binding ChangesetMerged}" Header="IsMerged" Width="4*"/>
+                <DataGridTextColumn Binding="{Binding CheckinTime, StringFormat='dd/MM/yyyy HH:mm:ss'}" Header="Time" Width="8*"/>
+                <DataGridTextColumn Binding="{Binding ChangesetMerged}" Width="4*">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Style.Triggers>
+                                <Trigger Property="Text" Value="True">
+                                    <Setter Property="Background" Value="{Binding ChangesetMerged, Converter={StaticResource BoolToColorConverter}}"/>
+                                </Trigger>
+                                <Trigger Property="Text" Value="False">
+                                    <Setter Property="Background" Value="{Binding ChangesetMerged, Converter={StaticResource BoolToColorConverter}}"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
         <!-- EndRegion -->
