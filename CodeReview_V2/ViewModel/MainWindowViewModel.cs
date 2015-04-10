@@ -63,9 +63,19 @@ namespace CodeReview_V2.ViewModel
 			string checkin = string.Empty;
 			if (associations.Count > 1)
 			{
+				CustomFileObject minCheckedOutFile  = null;
+				CustomFileObject maxCheckedInFile = null;
+				try
+				{
+					minCheckedOutFile = associations.Aggregate((c, d) => Convert.ToInt32(c.CheckoutChangeset) < Convert.ToInt32(d.CheckoutChangeset) ? c : d);
+					maxCheckedInFile = associations.Aggregate((c, d) => Convert.ToInt32(c.CheckinChangeset) > Convert.ToInt32(d.CheckinChangeset) ? c : d);
+				}
+				catch (Exception) 
+				{
+					//Some file does not have the checkout or checkin changeset number.
+					return;
+				}
 
-				CustomFileObject minCheckedOutFile = associations.Aggregate((c, d) => Convert.ToInt32(c.CheckoutChangeset) < Convert.ToInt32(d.CheckoutChangeset) ? c : d);
-				CustomFileObject maxCheckedInFile = associations.Aggregate((c, d) => Convert.ToInt32(c.CheckinChangeset) > Convert.ToInt32(d.CheckinChangeset) ? c : d);
 				if (minCheckedOutFile.Filename != maxCheckedInFile.Filename)
 				{
 					//status message;
