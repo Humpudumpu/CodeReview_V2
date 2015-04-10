@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text;
 using System.Collections.Generic;
-	
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 using CodeReview_V2.Model;
@@ -26,6 +26,10 @@ namespace CodeReview_V2.DataAccess
 
 			incident = ttAccess.GetIncident(incidentNo);
 
+			incident.IncidentBranchName = incidentNo.ToString();
+			//Find the intergration branch path and name, the dev branch path and name, the incident branch path
+			incident = DetermineAllIncidentMergePathsAndName(incident);
+
 			//The checkin's from the incident branch are not recorded in the teamtrack incident.
 			//The teamtrack incident only has the branch and merge information.
 			//TFS access is required to get the changesets in the incident branch. These changesets will then
@@ -37,6 +41,49 @@ namespace CodeReview_V2.DataAccess
 			incident = AssignCheckoutChangeset(incident);
 			return incident;
 		}
+
+		private Incident DetermineAllIncidentMergePathsAndName(Incident incident)
+		{
+			Regex devBranch = new Regex(@"\$(?<devPath>(?<productPath>.*/Product/(?<product>.*))/(?<dev>.*dev))/(.*)");
+			Regex integrationBranch = new Regex(@"\$(?<intPath>.*/Product/(?<product>.*)/Builds/(?<int>.*int))/(.*)");
+			Regex incidentBranch = new Regex(@"\$(?<incidentPath>.*/Incidents/\d+)$");
+
+			foreach (CustomChangeset changeset in incident.ChangeSets)
+			{
+				if (incident.IncidentDevBranchName != String.Empty &&
+					incident.IncidentIntegrationBranchName != String.Empty &&
+					incident.IncidentProductName != String.Empty &&
+					incident.IncidentBranchPath != String.Empty)
+					break;
+
+				foreach (FileItem file in changeset.Files)
+				{
+					if (devBranch.IsMatch(file.Filename) && incident.IncidentDevBranchName == String.Empty)
+					{
+						incident.IncidentProductName = devBranch.Match(file.Filename).Groups["product"].Value;
+						incident.IncidentProductPath = devBranch.Match(file.Filename).Groups["productPath"].Value;
+						incident.IncidentDevBranchName = devBranch.Match(file.Filename).Groups["dev"].Value;
+						incident.IncidentDevBranchPath = devBranch.Match(file.Filename).Groups["devPath"].Value;
+						break;
+					}
+					else if (integrationBranch.IsMatch(file.Filename) && incident.IncidentIntegrationBranchName == String.Empty)
+					{
+						incident.IncidentIntegrationBranchName = integrationBranch.Match(file.Filename).Groups["int"].Value;
+						incident.IncidentIntegrationBranchPath = integrationBranch.Match(file.Filename).Groups["intPath"].Value;
+						break;
+					}
+					else if (incidentBranch.IsMatch(file.Filename) && incident.IncidentBranchPath == String.Empty)
+					{
+						incident.IncidentBranchPath = incidentBranch.Match(file.Filename).Value;
+						break;
+					}
+				}
+			}
+
+			return incident;
+		}
+
+
 		//Complicated code. If possible at some later stage we can simplify the code.
 		private Incident AssignCheckoutChangeset(Incident incident)
 		{
