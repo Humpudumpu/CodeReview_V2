@@ -101,6 +101,33 @@ namespace CodeReview_V2.DataAccess
 			return incidentBranchChangeSet;
 		}
 
+		//Called from CodeReview class
+		public List<CustomChangeset> ValidateDevBranchIsMergedToIntegrationBranch(List<CustomChangeset> incidentChangesets, string devBranchPath, string integrationBranchPath)
+		{
+			TfsTeamProjectCollection tfs = new TfsTeamProjectCollection(new Uri(@"http://can10tfsprd1:8080/tfs/can10tpc4"));
+			var service = tfs.GetService<VersionControlServer>();
+
+			//Get the merges from source : $/USCAN/Product/5.0SON/##dev to $/USCAN/Product/5.0SON/Builds/##int
+			//This is equivalent to : tf.exe merges [source] destination /recursive /version:T
+			List<ChangesetMerge> devToIntegrationBranchMerges =
+				service.QueryMerges(new ItemSpec(devBranchPath, RecursionType.Full), VersionSpec.Latest,
+									new ItemSpec(integrationBranchPath, RecursionType.Full), VersionSpec.Latest, null, null).Distinct().ToList<ChangesetMerge>();
+
+			foreach(CustomChangeset change in incidentChangesets)
+			{
+				foreach(FileItem file in change.Files)
+				{
+					if (file.Filename.Contains(devBranchPath))
+					{
+						ChangesetMerge y = devToIntegrationBranchMerges.Where(z => z.SourceVersion.ToString() == change.CheckinChangeSet).First();
+						change.IntChangesetMergedTo = (y != null) ? y.TargetVersion.ToString() : String.Empty;
+						change.IsDevChangesetMergedToInt = change.IntChangesetMergedTo != String.Empty ? true : false;
+					}
+				}
+			}
+			return incidentChangesets;
+		}
+
 		public T RunTF<T>(string arguments, bool redirectOutput = true, int waitMinutes = 2)
 		{
 			Directory.SetCurrentDirectory(@"C:\Work2");

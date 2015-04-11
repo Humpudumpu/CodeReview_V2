@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 using CodeReview_V2.Model;
@@ -23,9 +24,7 @@ namespace CodeReview_V2.DataAccess
 		public Incident GetIncident(uint incidentNo)
 		{
 			Incident incident = new Incident();
-
 			incident = ttAccess.GetIncident(incidentNo);
-
 			incident.IncidentBranchName = incidentNo.ToString();
 			//Find the intergration branch path and name, the dev branch path and name, the incident branch path
 			incident = DetermineAllIncidentMergePathsAndName(incident);
@@ -40,6 +39,13 @@ namespace CodeReview_V2.DataAccess
 			
 			incident.ChangeSets.AddRange(tfsAccess.GetIncidentChanges(incidentBranches, incident.IncidentDevBranchPath));
 			incident = AssignCheckoutChangeset(incident);
+			incident = ValidateDevBranchMergedToIntegrationBranch(incident);
+			return incident;
+		}
+
+		private Incident ValidateDevBranchMergedToIntegrationBranch(Incident incident)
+		{
+			incident.ChangeSets = tfsAccess.ValidateDevBranchIsMergedToIntegrationBranch(incident.ChangeSets, incident.IncidentDevBranchPath, incident.IncidentIntegrationBranchPath);
 			return incident;
 		}
 
