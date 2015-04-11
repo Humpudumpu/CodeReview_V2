@@ -7,6 +7,7 @@ using PVCSTools;
 using CodeReview_V2.Model;
 using System.Text.RegularExpressions;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace CodeReview_V2.DataAccess
 {
@@ -40,17 +41,11 @@ namespace CodeReview_V2.DataAccess
 
 		private string GetIncidentURL(uint incidentNo)
 		{
-			if (!LoggedIn)
-				LoggedIn = tt.Login(USER, PASSWORD);
-
 			return tt.GetIncidentURL(incidentNo);
 		}
 
 		private List<ITeamTrack.Association> GetFileAssociations(uint incidentNo)
 		{
-			if (!LoggedIn)
-				LoggedIn = tt.Login(USER, PASSWORD);
-
 			return tt.GetAssociations(incidentNo);
 		}
 
@@ -63,6 +58,7 @@ namespace CodeReview_V2.DataAccess
 
 		private List<CustomChangeset> GetChangeset(uint incidentNo)
 		{
+
 			List<ITeamTrack.Association> associations = GetFileAssociations(incidentNo);
 			List<CustomChangeset> changesets = new List<CustomChangeset>();
 			Regex incidentBranch = new Regex(@"\$?/Incidents/\d+$");
@@ -75,8 +71,7 @@ namespace CodeReview_V2.DataAccess
 				{
 					if (changes.CheckinChangeSet == association.checkInRevision)
 					{
-						change = changes;
-						change.Files.Add(FileItem.CreateFileItem(association.file, change.CheckinChangeSet));
+						changes.Files.Add(FileItem.CreateFileItem(association.file, changes.CheckinChangeSet));
 						break;
 					}
 				}
