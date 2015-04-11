@@ -37,7 +37,8 @@ namespace CodeReview_V2.DataAccess
 			//Get the associations "Incident/#####"
 			List<CustomChangeset> incidentBranches = incident.ChangeSets.Where(x => x.IncidentBranch == true).ToList<CustomChangeset>();
 			//Get each changeset in the Incident branch
-			incident.ChangeSets.AddRange(tfsAccess.GetIncidentChanges(incidentBranches));
+			
+			incident.ChangeSets.AddRange(tfsAccess.GetIncidentChanges(incidentBranches, incident.IncidentDevBranchPath));
 			incident = AssignCheckoutChangeset(incident);
 			return incident;
 		}
