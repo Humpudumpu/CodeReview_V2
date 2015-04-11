@@ -162,7 +162,8 @@ namespace CodeReview_V2.ViewModel
 					//Here we can add filters for file that needs to be displayed and that can be ignored.
 					IncidentDataGrid.Add(
 						new CustomFileObject(file.Filename, file.CheckinChangeset, file.CheckoutChangeset,
-                                                 changeset.Comments, changeset.DevBranch, changeset.Author, Path.GetExtension(file.Filename), changeset.CheckinTime, changeset.ChangesetMerged)
+                                                 changeset.Comments, changeset.DevBranch, changeset.Author, Path.GetExtension(file.Filename), changeset.CheckinTime, 
+												 changeset.IsChangesetMergedToDev, changeset.IsDevChangesetMergedToInt)
 						);
 				}
 			}
@@ -179,9 +180,11 @@ namespace CodeReview_V2.ViewModel
 		public string Author { get; set; }
         public string FileType { get; set; }
 		public DateTime CheckinTime { get; set; }
-		public bool ChangesetMerged { get; set; }
+		public bool DevChangesetMerged { get; set; }
+		public bool IntChangesetMerged { get; set; }
 
-		public CustomFileObject(string filename, string checkinChangeset, string checkoutchangeset, string comments, string devBranch, string author, string fileType, DateTime dateTime, bool changesetMerged)
+		public CustomFileObject(string filename, string checkinChangeset, string checkoutchangeset, string comments, string devBranch, string author, string fileType, DateTime dateTime,
+								bool devChangesetMerged, bool intChangesetMerged)
 		{
 			Filename = filename;
 			CheckinChangeset = checkinChangeset;
@@ -191,7 +194,8 @@ namespace CodeReview_V2.ViewModel
 			Author = author;
             FileType = fileType;
 			CheckinTime = dateTime;
-			ChangesetMerged = changesetMerged;
+			DevChangesetMerged = devChangesetMerged;
+			IntChangesetMerged = intChangesetMerged;
 		}
 
 		public override string ToString()

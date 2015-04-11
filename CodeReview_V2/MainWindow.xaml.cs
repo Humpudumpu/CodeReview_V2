@@ -33,7 +33,7 @@ namespace CodeReview_V2
 				return new SolidColorBrush(Colors.LightGreen);
 			}
 			else
-				return new SolidColorBrush(Colors.Red);
+				return new SolidColorBrush(Colors.White);
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

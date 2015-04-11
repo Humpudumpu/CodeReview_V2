@@ -35,6 +35,8 @@ namespace CodeReview_V2.Model
 		public bool IsChangesetMergedToDev { get; set; }
 		public string DevChangesetMergedTo { get; set; }
 
+		public bool IsDevChangesetMergedToInt { get; set; }
+		public string IntChangesetMergedTo { get; set; }
 
 		private void Init(){
 			Files = new List<FileItem>();
@@ -47,6 +49,8 @@ namespace CodeReview_V2.Model
 			CheckinTime = System.DateTime.Now;
 			IsChangesetMergedToDev = false;
 			DevChangesetMergedTo = String.Empty;
+			IsDevChangesetMergedToInt = false;
+			IntChangesetMergedTo = String.Empty;
 		}
 
 		public CustomChangeset()
@@ -65,6 +69,8 @@ namespace CodeReview_V2.Model
 			Author = author;
 			IsChangesetMergedToDev = false;
 			DevChangesetMergedTo = String.Empty;
+			IsDevChangesetMergedToInt = false;
+			IntChangesetMergedTo = String.Empty;
 		}
 	}
 }
