@@ -96,6 +96,8 @@ namespace CodeReview_V2.DataAccess
 					if (changeset.IncidentBranch)
 						branchedChangeSet = changeset.CheckinChangeSet;
 
+					changeset.DevBranch = incident.IncidentDevBranchName;
+
 					foreach (FileItem file in changeset.Files)
 					{
 						if (!fileChangesets.ContainsKey(file.Filename))
