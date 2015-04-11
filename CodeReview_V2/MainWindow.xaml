@@ -44,12 +44,6 @@
             <!-- Context menu definitions-->
             <DataGrid.ContextMenu>
                 <ContextMenu>
-                    <!-- unused code
-                    <ContextMenu.ItemContainerStyle>
-                        <Style TargetType="{x:Type MenuItem}">
-                            <Setter Property="CommandParameter" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}, Path=PlacementTarget.SelectedItems}"/>
-                        </Style>
-                    </ContextMenu.ItemContainerStyle>-->
                     <MenuItem Header="Difference" Command="{Binding GetFileDifference}" CommandParameter="{Binding ElementName=IncidentAssociations, Path=SelectedItems}"/>
                     <MenuItem Header="Group by" Name="GroupByOptionsMenu" >
                         <MenuItem.Icon>
