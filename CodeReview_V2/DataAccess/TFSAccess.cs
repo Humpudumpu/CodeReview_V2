@@ -36,27 +36,6 @@ namespace CodeReview_V2.DataAccess
 			{
 				//assumption is that the incidentbranch will be just one. so there will be just one file association.
 				List<Changeset> incidentBranchHistory = service.QueryHistory(incidentBranchPath.Files.First().Filename, RecursionType.Full).ToList<Changeset>();
-				//$/USCAN/Product/5.0SON/Incidents/72382
-				//Match 5.0SON/Incidents/72382 -> Groups[1] will return $/USCAN/Product/5.0SON
-				Regex productPath = new Regex(@"(.*)/Incidents/\d+$", RegexOptions.IgnoreCase);
-				string productPathValue = productPath.Match(incidentBranchPath.Files.First().Filename).Groups[1].Value;
-
-				//Get all the branches under the product : so all branches under $/USCAN/Product/5.0SON
-				List<string> branchesUnderProductBranch = RunTF<string>(String.Format("dir /collection:{0} /version:T /folders {1}", @"http://can10tfsprd1:8080/tfs/can10tpc4" , productPathValue))
-										.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries).ToList<string>();
-				//Isolate the dev branch
-				Regex devBranch = new Regex(@"^\$(.*)dev$");
-				string devBranchPath = productPathValue;
-				string devBranchTest = String.Empty;
-				foreach (string s in branchesUnderProductBranch)
-					if (devBranch.IsMatch(s))
-					{
-						//result here: $/USCAN/Product/5.0SON/5.0dev
-						devBranchTest = s.Replace("$", "");
-						devBranchTest = devBranchTest.Replace("dev", "");
-						devBranchPath += s.Replace("$", "/");
-						break;
-					}
 
 				//Get the merges from source : $/USCAN/Product/5.0SON/Incidents/##### to $/USCAN/Product/5.0SON/##dev
 				//This is equivalent to : tf.exe merges [source] destination /recursive /version:T
