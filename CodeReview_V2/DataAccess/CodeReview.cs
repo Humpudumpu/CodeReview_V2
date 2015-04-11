@@ -45,9 +45,9 @@ namespace CodeReview_V2.DataAccess
 
 		private Incident DetermineAllIncidentMergePathsAndName(Incident incident)
 		{
-			Regex devBranch = new Regex(@"\$(?<devPath>(?<productPath>.*/Product/(?<product>.*))/(?<dev>.*dev))/(.*)");
-			Regex integrationBranch = new Regex(@"\$(?<intPath>.*/Product/(?<product>.*)/Builds/(?<int>.*int))/(.*)");
-			Regex incidentBranch = new Regex(@"\$(?<incidentPath>.*/Incidents/\d+)$");
+			Regex devBranch = new Regex(@"(?<devPath>(?<productPath>\$.*/Product/(?<product>.*))/(?<dev>.*dev))/(.*)");
+			Regex integrationBranch = new Regex(@"(?<intPath>\$.*/Product/(?<product>.*)/Builds/(?<int>.*int))/(.*)");
+			Regex incidentBranch = new Regex(@"(?<incidentPath>\$.*/Incidents/\d+)$");
 
 			foreach (CustomChangeset changeset in incident.ChangeSets)
 			{
