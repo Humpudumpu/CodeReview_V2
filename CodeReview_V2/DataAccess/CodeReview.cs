@@ -95,14 +95,10 @@ namespace CodeReview_V2.DataAccess
 		private Incident AssignCheckoutChangeset(Incident incident)
 		{
 			Dictionary<string,List<string>> fileChangesets = new Dictionary<string,List<string>>();
-			string branchedChangeSet = String.Empty;
 			try
 			{
 				foreach (CustomChangeset changeset in incident.ChangeSets)
 				{
-					if (changeset.IncidentBranch)
-						branchedChangeSet = changeset.CheckinChangeSet;
-
 					changeset.DevBranch = incident.IncidentDevBranchName;
 
 					foreach (FileItem file in changeset.Files)
