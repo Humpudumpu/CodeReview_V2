@@ -34,10 +34,9 @@ namespace CodeReview_V2.DataAccess
 			//TFS access is required to get the changesets in the incident branch. These changesets will then
 			//be converted to ITeamtrack.Association
 			//Get the associations "Incident/#####"
-			List<CustomChangeset> incidentBranches = incident.ChangeSets.Where(x => x.IncidentBranch == true).ToList<CustomChangeset>();
 			//Get each changeset in the Incident branch
 			
-			incident.ChangeSets.AddRange(tfsAccess.GetIncidentChanges(incidentBranches, incident.IncidentDevBranchPath));
+			incident.ChangeSets.AddRange(tfsAccess.GetIncidentChanges(incident.IncidentBranchPath, incident.IncidentDevBranchPath));
 			incident = AssignCheckoutChangeset(incident);
 			incident = ValidateDevBranchMergedToIntegrationBranch(incident);
 			return incident;

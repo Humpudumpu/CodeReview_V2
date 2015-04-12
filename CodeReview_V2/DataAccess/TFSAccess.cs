@@ -23,7 +23,7 @@ namespace CodeReview_V2.DataAccess
 			Tfs = Path.Combine(Environment.GetEnvironmentVariable("VS110COMNTOOLS").Replace("Tools", "IDE"), "tf.exe");
 		}
 
-		public List<CustomChangeset> GetIncidentChanges(List<CustomChangeset> incidentBranches, string devBranchPath)
+		public List<CustomChangeset> GetIncidentChanges(string incidentBranch, string devBranchPath)
 		{
 			//Here the incident branch just has the branch name. 
 			//Here the list of changeset will have each file that was changed in the incidentbranch.
@@ -32,39 +32,41 @@ namespace CodeReview_V2.DataAccess
 			TfsTeamProjectCollection tfs = new TfsTeamProjectCollection(new Uri(@"http://can10tfsprd1:8080/tfs/can10tpc4"));
 			var service = tfs.GetService<VersionControlServer>();
 
-			foreach (CustomChangeset incidentBranchPath in incidentBranches)
-			{
-				//assumption is that the incidentbranch will be just one. so there will be just one file association.
-				List<Changeset> incidentBranchHistory = service.QueryHistory(incidentBranchPath.Files.First().Filename, RecursionType.Full).Distinct().ToList<Changeset>();
+            //#Future: If there are more than one incident branch in an incident. Put a loop like : foreach(CustomChangeset incidentBranchPath in incidentBranches){}
+            //Now: since we assume that there is just one incident branch associated to each incident -
 
-				//Get the merges from source : $/USCAN/Product/5.0SON/Incidents/##### to $/USCAN/Product/5.0SON/##dev
-				//This is equivalent to : tf.exe merges [source] destination /recursive /version:T
-				List<ChangesetMerge> incidentToDevBranchMerges = 
-					service.QueryMerges(new ItemSpec(incidentBranchPath.Files.First().Filename, RecursionType.Full), VersionSpec.Latest, 
-									    new ItemSpec(devBranchPath, RecursionType.Full), VersionSpec.Latest, null, null).Distinct().ToList<ChangesetMerge>();
 
-				//Remove the branch changeset number - the changeset where the incident branch started.
-				Changeset removed = incidentBranchHistory.Last();
-				incidentBranchHistory.Remove(removed);
-				changesets.AddRange(PopulateWithChangesetsFromIncidentBranch(incidentBranchHistory, incidentToDevBranchMerges));
+			//assumption is that the incidentbranch will be just one. so there will be just one file association.
+			List<Changeset> incidentBranchHistory = service.QueryHistory(incidentBranch, RecursionType.Full).Distinct().ToList<Changeset>();
+
+			//Get the merges from source : $/USCAN/Product/5.0SON/Incidents/##### to $/USCAN/Product/5.0SON/##dev
+			//This is equivalent to : tf.exe merges [source] destination /recursive /version:T
+			List<ChangesetMerge> incidentToDevBranchMerges = 
+				service.QueryMerges(new ItemSpec(incidentBranch, RecursionType.Full), VersionSpec.Latest, 
+									new ItemSpec(devBranchPath, RecursionType.Full), VersionSpec.Latest, null, null).Distinct().ToList<ChangesetMerge>();
+
+			//Remove the branch changeset number - the changeset where the incident branch started.
+			Changeset removed = incidentBranchHistory.Last();
+			incidentBranchHistory.Remove(removed);
+			changesets.AddRange(PopulateWithChangesetsFromIncidentBranch(incidentBranchHistory, incidentToDevBranchMerges));
 	
-				//This is to avoid the last changeset - The changeset that was branched. (For ex. in Incident#72382 - changeset #222
-				//Why avoid last changeset because = file changes in the branch changeset is all the files in the dev branch. So when I query change for the 
-				//branch changeset, it gives me all the files in the branch - But in reality the change is that it was branched from the dev branch. 
-				//So I create a dummy custom changeset. Enumerate all the files that were changed in the incident branch and assign the changesetID of the branch - i.e. according to the ex. changeset#222
-				CustomChangeset removedCustom = new CustomChangeset(String.Empty, removed.Comment, String.Empty, removed.ChangesetId.ToString(), removed.CommitterDisplayName);
+			//This is to avoid the last changeset - The changeset that was branched. (For ex. in Incident#72382 - changeset #222
+			//Why avoid last changeset because = file changes in the branch changeset is all the files in the dev branch. So when I query change for the 
+			//branch changeset, it gives me all the files in the branch - But in reality the change is that it was branched from the dev branch. 
+			//So I create a dummy custom changeset. Enumerate all the files that were changed in the incident branch and assign the changesetID of the branch - i.e. according to the ex. changeset#222
+			CustomChangeset removedCustom = new CustomChangeset(String.Empty, removed.Comment, String.Empty, removed.ChangesetId.ToString(), removed.CommitterDisplayName);
 				
-				//Go through all the changeset other than the branch changeset, get all the files and assign the checkinchangeset as the branch changeset number.
-				//This is basically creating a changeset with only the files that were changes in the incident branch. (reverse engineering)
-				List<string> files = changesets.SelectMany(h => h.Files)
-					.Select(filenames => filenames.Filename).Distinct().ToList();
+			//Go through all the changeset other than the branch changeset, get all the files and assign the checkinchangeset as the branch changeset number.
+			//This is basically creating a changeset with only the files that were changes in the incident branch. (reverse engineering)
+			List<string> files = changesets.SelectMany(h => h.Files)
+				.Select(filenames => filenames.Filename).Distinct().ToList();
 				
-				//Now assign all the files that were changed in the incident branch with the branch changeset number.
-				foreach (string file in files)
-					removedCustom.Files.Add(FileItem.CreateFileItem(file, removed.ChangesetId.ToString(), ChangeType.Branch));
+			//Now assign all the files that were changed in the incident branch with the branch changeset number.
+			foreach (string file in files)
+				removedCustom.Files.Add(FileItem.CreateFileItem(file, removed.ChangesetId.ToString(), ChangeType.Branch));
 
-				changesets.Add(removedCustom);
-			}
+			changesets.Add(removedCustom);
+			
 			return changesets;
 		}
 
